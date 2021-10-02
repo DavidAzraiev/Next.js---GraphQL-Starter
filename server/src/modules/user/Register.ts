@@ -2,7 +2,9 @@ import { isAuth } from './../middleware/isAuth';
 import { User } from './../../entity/User';
 import { Arg, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
 import bcrypt from 'bcryptjs';
-import { RegisterInput } from '../register/RegisterInput';
+import { RegisterInput } from './register/RegisterInput';
+import { sendEmail } from '../utils/sendEmail';
+import { createConfirmation } from '../utils/createConfirmation';
 
 @Resolver()
 export class RegisterResolver {
@@ -25,6 +27,8 @@ export class RegisterResolver {
       email,
       password: hashedPassword,
     }).save();
+
+    await sendEmail(email, await createConfirmation(user.id));
 
     return user;
   }

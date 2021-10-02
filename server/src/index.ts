@@ -1,5 +1,7 @@
+import { ConfirmUserResolver } from './modules/user/ConfirmUser';
 import 'reflect-metadata';
 
+import { sendEmail } from './modules/utils/sendEmail';
 import { ApolloServer } from 'apollo-server-express';
 import express from 'express';
 import { buildSchema } from 'type-graphql';
@@ -17,7 +19,12 @@ const main = async () => {
   await createConnection();
 
   const schema = await buildSchema({
-    resolvers: [MeResolver, RegisterResolver, LoginResolver],
+    resolvers: [
+      MeResolver,
+      RegisterResolver,
+      LoginResolver,
+      ConfirmUserResolver,
+    ],
     // authChecker: ({ context: { req } }) => {
     //   if (req.session.userId) {
     //     return true;
