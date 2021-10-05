@@ -1,15 +1,9 @@
-import { ConfirmUserResolver } from './modules/user/ConfirmUser';
 import 'reflect-metadata';
-
-import { sendEmail } from './modules/utils/sendEmail';
 import { ApolloServer } from 'apollo-server-express';
 import express from 'express';
 import { buildSchema } from 'type-graphql';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import { createConnection } from 'typeorm';
-import { RegisterResolver } from './modules/user/Register';
-import { MeResolver } from './modules/user/Me';
-import { LoginResolver } from './modules/user/Login';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
 import { redis } from './redis';
@@ -19,12 +13,7 @@ const main = async () => {
   await createConnection();
 
   const schema = await buildSchema({
-    resolvers: [
-      MeResolver,
-      RegisterResolver,
-      LoginResolver,
-      ConfirmUserResolver,
-    ],
+    resolvers: [__dirname + '/modules/**/*.ts'],
     // authChecker: ({ context: { req } }) => {
     //   if (req.session.userId) {
     //     return true;

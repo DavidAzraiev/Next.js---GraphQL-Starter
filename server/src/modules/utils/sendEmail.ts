@@ -6,7 +6,7 @@ export async function sendEmail(email: string, url: string) {
   const transporter = nodemailer.createTransport({
     host: 'smtp.ethereal.email',
     port: 587,
-    secure: true, // true for 465, false for other ports
+    secure: false, // true for 465, false for other ports
     auth: {
       user: account.user, // generated ethereal user
       pass: account.pass, // generated ethereal password
@@ -14,10 +14,10 @@ export async function sendEmail(email: string, url: string) {
   });
 
   const mailOptions = {
-    from: '"Fred Foo 👻" <foo@example.com>', // sender address
+    from: 'to@test.com', // sender address
     to: email, // list of receivers
-    subject: 'Hello ✔', // Subject line
-    text: 'Hello world?', // plain text body
+    subject: 'Reset Password', // Subject line
+    text: 'Reset Password', // plain text body
     html: `confirmed email here: <a href="${url}">${url}</a>`, // html body
   };
 
