@@ -1,3 +1,4 @@
+import { createSchema } from './utils/createSchema';
 import 'reflect-metadata';
 import { ApolloServer } from 'apollo-server-express';
 import express from 'express';
@@ -12,15 +13,7 @@ import cors from 'cors';
 const main = async () => {
   await createConnection();
 
-  const schema = await buildSchema({
-    resolvers: [__dirname + '/modules/**/*.ts'],
-    // authChecker: ({ context: { req } }) => {
-    //   if (req.session.userId) {
-    //     return true;
-    //   }
-    //   return false;
-    // },
-  });
+  const schema = await createSchema();
 
   const apolloServer = new ApolloServer({
     schema,
