@@ -11,6 +11,6 @@ export const testConn = (drop: boolean = false) => {
     database: 'next-graphql-starter-test',
     synchronize: true,
     dropSchema: drop,
-    entities: [__dirname + '../entity/*.*'],
+    entities: [__dirname + '/../entity/*.*'],
   });
 };

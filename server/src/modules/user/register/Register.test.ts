@@ -1,7 +1,8 @@
-import { gCall } from './../../../test-utils/gCall';
-import { graphql } from 'graphql';
-import { Connection } from 'typeorm';
+import { User } from './../../../entity/User';
 import { testConn } from './../../../test-utils/testConn';
+import faker from 'faker';
+import { gCall } from './../../../test-utils/gCall';
+import { Connection } from 'typeorm';
 
 let conn: Connection;
 beforeAll(async () => {
@@ -17,30 +18,45 @@ mutation Register($data: RegisterInput!) {
   register(
     data: $data
   ) {
+    id
     firstName
     lastName
     email
-    id
     name
   }
 }
-
 `;
 
 describe('Register', () => {
-  it('create user', async () => {
-    console.log(
-      await gCall({
-        source: registerMutation,
-        variableValues: {
-          data: {
-            firstName: 'david',
-            lastName: 'david',
-            email: 'david20@test.com',
-            password: 'david',
-          },
+  it.only('create user', async () => {
+    const user = {
+      firstName: faker.name.findName(),
+      lastName: faker.name.lastName(),
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+    };
+
+    const response = await gCall({
+      source: registerMutation,
+      variableValues: {
+        data: user,
+      },
+    });
+
+    expect(response).toMatchObject({
+      data: {
+        register: {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
         },
-      })
-    );
+      },
+    });
+
+    const dbUser = await User.findOne({ where: { email: user.email } });
+
+    expect(dbUser).toBeDefined();
+    expect(dbUser!.confirmed).toBeFalsy();
+    expect(dbUser!.firstName).toBe(user.firstName);
   });
 });
