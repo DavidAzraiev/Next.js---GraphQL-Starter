@@ -1,4 +1,5 @@
 import { buildSchema } from 'type-graphql';
+import { ProfilePictureResolver } from './../modules/user/ProfilePicture';
 import { CreateUserResolver } from './../modules/user/CreateUser';
 import { RegisterResolver } from './../modules/user/Register';
 import { MeResolver } from './../modules/user/Me';
@@ -19,6 +20,7 @@ export const createSchema = () =>
       MeResolver,
       RegisterResolver,
       CreateUserResolver,
+      ProfilePictureResolver,
     ],
     authChecker: ({ context: { req } }) => {
       return !!req.session.userId;
