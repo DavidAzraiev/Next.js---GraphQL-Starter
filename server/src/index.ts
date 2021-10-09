@@ -8,6 +8,10 @@ import session from 'express-session';
 import connectRedis from 'connect-redis';
 import { redis } from './redis';
 import cors from 'cors';
+import queryComplexity, {
+  simpleEstimator,
+  fieldExtensionsEstimator,
+} from 'graphql-query-complexity';
 
 const main = async () => {
   await createConnection();
@@ -17,6 +21,21 @@ const main = async () => {
   const apolloServer = new ApolloServer({
     schema,
     context: ({ req, res }: any) => ({ req, res }),
+    validationRules: [
+      queryComplexity({
+        maximumComplexity: 20,
+        variables: {},
+        onComplete: (complexity: number) => {
+          console.log('Query Complexity: ', complexity);
+        },
+        estimators: [
+          fieldExtensionsEstimator(),
+          simpleEstimator({
+            defaultComplexity: 1,
+          }),
+        ],
+      }) as any,
+    ],
     plugins: [ApolloServerPluginLandingPageGraphQLPlayground({})], //OLD GRAPHQL PLAYGROUND
   });
 
