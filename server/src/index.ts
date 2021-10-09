@@ -1,8 +1,7 @@
-import { createSchema } from './utils/createSchema';
 import 'reflect-metadata';
+import { createSchema } from './utils/createSchema';
 import { ApolloServer } from 'apollo-server-express';
 import express from 'express';
-import { buildSchema } from 'type-graphql';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import { createConnection } from 'typeorm';
 import session from 'express-session';
